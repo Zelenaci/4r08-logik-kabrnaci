@@ -40,7 +40,7 @@ class Application(tk.Tk):
                 c.grid(column=sloupec, row=radek+2)
                 radekBarev.append(c)
             self.hadaneBarvy.append(radekBarev)
-        self.hadaneBarvy[1][4].config(background="red")
+
         
         ### statistika ###        
         odpovedProgramu = []
@@ -65,7 +65,10 @@ class Application(tk.Tk):
                 b.grid(row=radek+13, column=sloupec)
         
     def click(self, r, s):
-           print(r,s)
+        print(r,s)
+        aktivniRadek = 9 #zatim
+        self.hadaneBarvy[aktivniRadek][s].config(background=self.barvy[r])
+
    
         
         # self.bind("<Escape>", self.quit)
