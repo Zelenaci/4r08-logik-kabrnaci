@@ -22,6 +22,8 @@ class Application(tk.Tk):
                      "#dd9900 #ffffff".split()
         self.sirka = 30
         self.vyska = 20
+        global aktivniRadek
+        aktivniRadek = 9
         ### skrytá pole ###
         self.skryteBarvy=[]
         for sloupec in range(5):
@@ -52,6 +54,18 @@ class Application(tk.Tk):
         ### oddělovací čára ###
         tk.Canvas(self, background="black", width=6*self.sirka, height=5).grid(column=0, row=12, columnspan=5)
         
+        ### tlačítka hry ###
+        def odeslat():
+            global aktivniRadek
+            if aktivniRadek > 0:
+                print(self.skryteBarvy)
+                aktivniRadek -= 1
+            else:
+                pass
+            
+        tk.Button(self, text="Odeslat", command=odeslat).grid(column=6)
+        tk.Button(self, text="Znovu").grid(column=6)
+        
         ### tlačítka barev ###
         #tlacitka = []
         for radek, barva in enumerate(self.barvy):
@@ -66,9 +80,9 @@ class Application(tk.Tk):
         
     def click(self, r, s):
         print(r,s)
-        aktivniRadek = 9 #zatim
         self.hadaneBarvy[aktivniRadek][s].config(background=self.barvy[r])
 
+        
    
         
         # self.bind("<Escape>", self.quit)
