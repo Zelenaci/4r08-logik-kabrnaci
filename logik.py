@@ -8,6 +8,7 @@ Created on Tue Feb 26 11:07:40 2019
 
 from os.path import basename, splitext
 import tkinter as tk
+import random
 # from tkinter import ttk
 
 
@@ -22,8 +23,11 @@ class Application(tk.Tk):
                      "#dd9900 #ffffff".split()
         self.sirka = 30
         self.vyska = 20
+        
+        self.novaHra()
         global aktivniRadek
         aktivniRadek = 9
+        
         ### skrytá pole ###
         self.skryteBarvy=[]
         for sloupec in range(5):
@@ -31,7 +35,7 @@ class Application(tk.Tk):
             c.grid(column=sloupec,row=0)
             self.skryteBarvy.append(c)
         ### titulek ###
-        tk.Label(self, text="Logik").grid(columnspan=5)
+        tk.Label(self, text="Logik").grid(columnspan=5, row=1)
         tk.Label(self, text="barva/pozice").grid(row=1,column=6)
         ### pole s hádanou barvou ###
         self.hadaneBarvy=[]
@@ -42,6 +46,7 @@ class Application(tk.Tk):
                 c.grid(column=sloupec, row=radek+2)
                 radekBarev.append(c)
             self.hadaneBarvy.append(radekBarev)
+        
 
         
         ### statistika ###        
@@ -64,7 +69,7 @@ class Application(tk.Tk):
                 pass
             
         tk.Button(self, text="Odeslat", command=odeslat).grid(column=6)
-        tk.Button(self, text="Znovu").grid(column=6)
+        tk.Button(self, text="Znovu", command=self.novaHra).grid(column=6)
         
         ### tlačítka barev ###
         #tlacitka = []
@@ -82,7 +87,21 @@ class Application(tk.Tk):
         print(r,s)
         self.hadaneBarvy[aktivniRadek][s].config(background=self.barvy[r])
 
+    def novaHra(self):
+        global aktivniRadek
+        aktivniRadek=9
+        self.hadanka = []
+        for x in range(5):
+            while 1:
+                nahodnaBarva=self.barvy[random.randint(0,len(self.barvy)-1)]
+                if not nahodnaBarva in self.hadanka:
+                    break
+            self.hadanka.append(nahodnaBarva)
+        print(self.hadanka)
+        return self.hadanka
         
+
+    
    
         
         # self.bind("<Escape>", self.quit)
@@ -91,9 +110,9 @@ class Application(tk.Tk):
         # self.btn = tk.Button(self, text='Quit', command=self.quit)
         # self.btn.pack()
 
+
     def quit(self, event=None):
         super().quit()
-
 
 app = Application()
 app.mainloop()
