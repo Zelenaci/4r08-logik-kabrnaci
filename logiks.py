@@ -24,6 +24,8 @@ class Application(tk.Tk):
         self.sirka = 30
         self.vyska = 20
         
+        self.novaHra()
+        
         #skryté pole
         self.skryteBarvy = []
         for sloupec in range(5):
@@ -75,7 +77,7 @@ class Application(tk.Tk):
         aktivniRadek = 9 #zatim
         self.hadaneBarvy[aktivniRadek][s].config(background=self.barvy[r]) 
    
-    
+    def novaHra(self):
         self.hadanka = []
         for x in range(5):
             while 1:
@@ -83,6 +85,7 @@ class Application(tk.Tk):
                 if not nahodnaBarva in self.hadanka:
                     break
             self.hadanka.append(nahodnaBarva)
+            print(self.hadanka)
         return self.hadanka
         
     def quit(self, event=None):
