@@ -23,7 +23,7 @@ class Application(tk.Tk):
                      "#dd9900 #ffffff".split()
         self.sirka = 30
         self.vyska = 20
-        
+        self.znova = False
         self.novaHra()
         global aktivniRadek
         aktivniRadek = 9
@@ -62,14 +62,30 @@ class Application(tk.Tk):
         ### tlačítka hry ###
         def odeslat():
             global aktivniRadek
-            if aktivniRadek > 0:
+            global pokus
+        
+            if aktivniRadek > -1:
                 print(self.skryteBarvy)
+                ### kontrola barev ###
+                spravnaPozice = 0
+                spravnaBarva = 0
+                for i in range(len(self.pokus)):
+                    if self.pokus[i] == self.hadanka[i]:
+                        spravnaPozice += 1
+                    if self.pokus[i] in self.hadanka:
+                        spravnaBarva += 1
+                odpovedProgramu[aktivniRadek].config(text="{}/{}".format(spravnaBarva,spravnaPozice))
+                print(aktivniRadek)
                 aktivniRadek -= 1
+            
             else:
-                pass
+                self.znova = True
+                self.novaHra()
+            
+            
             
         tk.Button(self, text="Odeslat", command=odeslat).grid(column=6)
-        tk.Button(self, text="Znovu", command=self.novaHra).grid(column=6)
+        tk.Button(self, text="Znovu", command=self.znovu).grid(column=6)
         
         ### tlačítka barev ###
         #tlacitka = []
@@ -86,11 +102,23 @@ class Application(tk.Tk):
     def click(self, r, s):
         print(r,s)
         self.hadaneBarvy[aktivniRadek][s].config(background=self.barvy[r])
+        self.pokus[s] = self.barvy[r]
+        print(self.pokus)
+        
+
+    def znovu(self):
+        self.znova = True
+        self.novaHra()
 
     def novaHra(self):
         global aktivniRadek
         aktivniRadek=9
         self.hadanka = []
+        if self.znova == True:
+            for radek in range(5):
+                for sloupec in range(10):
+                    self.hadaneBarvy[sloupec][radek].config(background="gray65")
+            
         for x in range(5):
             while 1:
                 nahodnaBarva=self.barvy[random.randint(0,len(self.barvy)-1)]
@@ -98,6 +126,9 @@ class Application(tk.Tk):
                     break
             self.hadanka.append(nahodnaBarva)
         print(self.hadanka)
+        global pokus
+        self.pokus=[","]*5
+        print(self.pokus)
         return self.hadanka
         
 
