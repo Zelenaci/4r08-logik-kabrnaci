@@ -26,14 +26,13 @@ class Application(tk.Tk):
         self.znova = False
         self.novaHra()
         global aktivniRadek
-        aktivniRadek = 9
-        
+        aktivniRadek = 9     
         ### skrytá pole ###
         self.skryteBarvy=[]
         for sloupec in range(5):
             c = tk.Canvas(self, background="black", width=self.sirka, height=self.vyska)
             c.grid(column=sloupec,row=0)
-            self.skryteBarvy.append(c)
+            self.skryteBarvy.append(c)            
         ### titulek ###
         tk.Label(self, text="Logik").grid(columnspan=5, row=1)
         tk.Label(self, text="barva/pozice").grid(row=1,column=6)
@@ -50,11 +49,11 @@ class Application(tk.Tk):
 
         
         ### statistika ###        
-        odpovedProgramu = []
+        self.odpovedProgramu = []
         for radek in range(10):
             l = tk.Label(self, text="- / -")
             l.grid(column=6,row=radek+2)
-            odpovedProgramu.append(l)
+            self.odpovedProgramu.append(l)
 
         ### oddělovací čára ###
         tk.Canvas(self, background="black", width=6*self.sirka, height=5).grid(column=0, row=12, columnspan=5)
@@ -63,8 +62,10 @@ class Application(tk.Tk):
         def odeslat():
             global aktivniRadek
             global pokus
+            if self.konec == True:
+                self.znovu()
         
-            if aktivniRadek > -1:
+            elif aktivniRadek > -1:
                 print(self.skryteBarvy)
                 ### kontrola barev ###
                 spravnaPozice = 0
@@ -74,21 +75,29 @@ class Application(tk.Tk):
                         spravnaPozice += 1
                     if self.pokus[i] in self.hadanka:
                         spravnaBarva += 1
-                odpovedProgramu[aktivniRadek].config(text="{}/{}".format(spravnaBarva,spravnaPozice))
+                self.odpovedProgramu[aktivniRadek].config(text="{}/{}".format(spravnaBarva,spravnaPozice))
                 print(aktivniRadek)
+                if spravnaBarva == 5 and spravnaPozice == 5:
+                    print("Výhra")
+                    for sloupec in range(5):
+                        b = self.hadanka[sloupec]
+                        self.skryteBarvy[sloupec].config(background=b)
+                        self.konec = True
                 aktivniRadek -= 1
-            
+
             else:
-                self.znova = True
-                self.novaHra()
-            
+                print("Prohra")
+                for sloupec in range(5):
+                        b = self.hadanka[sloupec]
+                        self.skryteBarvy[sloupec].config(background=b)
+                        self.konec = True
+                self.konec = True
             
             
         tk.Button(self, text="Odeslat", command=odeslat).grid(column=6)
         tk.Button(self, text="Znovu", command=self.znovu).grid(column=6)
         
         ### tlačítka barev ###
-        #tlacitka = []
         for radek, barva in enumerate(self.barvy):
             for sloupec in range(5):
                 def akce(r=radek, s=sloupec):
@@ -111,13 +120,20 @@ class Application(tk.Tk):
         self.novaHra()
 
     def novaHra(self):
+        self.konec = False
         global aktivniRadek
+        global odpovedProgramu
         aktivniRadek=9
         self.hadanka = []
         if self.znova == True:
             for radek in range(5):
                 for sloupec in range(10):
                     self.hadaneBarvy[sloupec][radek].config(background="gray65")
+                for radek in range(10):
+                    self.odpovedProgramu[radek].config(text=" / ")
+                for sloupec in range(5):
+                    self.skryteBarvy[sloupec].config(background="black") 
+                    
             
         for x in range(5):
             while 1:
