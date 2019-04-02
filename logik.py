@@ -7,6 +7,7 @@ Created on Tue Feb 26 11:07:40 2019
 """
 
 from os.path import basename, splitext
+from tkinter import messagebox, filedialog
 import tkinter as tk
 import random
 # from tkinter import ttk
@@ -65,6 +66,10 @@ class Application(tk.Tk):
             if self.konec == True:
                 self.znovu()
         
+            elif "," in self.pokus:
+                print("Chyba, vyberte všechna pole")
+                messagebox.showerror(title="Chybný výběr polí", message="Chyba, vyberte všechna pole")
+            
             elif aktivniRadek > -1:
                 print(self.skryteBarvy)
                 ### kontrola barev ###
@@ -79,6 +84,7 @@ class Application(tk.Tk):
                 print(aktivniRadek)
                 if spravnaBarva == 5 and spravnaPozice == 5:
                     print("Výhra")
+                    messagebox.showinfo(title="Výhra", message="Vyhrál jste!")
                     for sloupec in range(5):
                         b = self.hadanka[sloupec]
                         self.skryteBarvy[sloupec].config(background=b)
@@ -90,8 +96,9 @@ class Application(tk.Tk):
                 for sloupec in range(5):
                         b = self.hadanka[sloupec]
                         self.skryteBarvy[sloupec].config(background=b)
-                        self.konec = True
                 self.konec = True
+                messagebox.showinfo(title="Prohra", message="Prohrál jste!")
+                
             
             
         tk.Button(self, text="Odeslat", command=odeslat).grid(column=6)
